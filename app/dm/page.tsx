@@ -54,14 +54,6 @@ export default function DMListPage() {
                         <h1>Direct Messages</h1>
                         <p>Your conversations</p>
                     </div>
-
-
-                    <button
-                        onClick={() => router.push("/blocked")}
-                        className="button button--quiet shrink-0"
-                    >
-                        <span aria-hidden="true">⊘</span> Blocked
-                    </button>
                 </div>
 
                 <button
@@ -73,7 +65,7 @@ export default function DMListPage() {
 
                 {loading && <p className="empty-state">Loading conversations...</p>}
 
-                {!loading && conversations.length === 0 && (
+                {!loading && conversations?.length === 0 && (
                     <p className="empty-state">
                         No conversations yet. Message someone by going to{" "}
                         <span className="text-amber-200">/dm/their-username</span>.
@@ -81,7 +73,7 @@ export default function DMListPage() {
                 )}
 
                 <ul className="list">
-                    {conversations.map((conv) => (
+                    {conversations?.map((conv) => (
                         <li
                             key={conv.username}
                             onClick={() => router.push(`/dm/${conv.username}`)}

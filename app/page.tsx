@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import BrandMark from "@/components/BrandMark";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -50,13 +51,13 @@ export default function SignInPage() {
     <div className="app-shell flex min-h-screen items-center justify-center">
       <div className="panel w-full max-w-md p-7 sm:p-10">
         <div className="mb-8 flex items-center gap-3">
-          <span className="brand-mark" aria-hidden="true" />
+          <BrandMark />
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-amber-200/80">Chat Here</p>
-            <h1 className="text-2xl font-semibold text-white">Sign in</h1>
+            <p className="brand-name">ChitChat</p>
+
           </div>
         </div>
-        <p className="mb-6 text-sm text-rose-100/75">Pick a username to join the chat</p>
+        <p className="mb-6 text-lg text-rose-100/75">Sign in</p>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <input

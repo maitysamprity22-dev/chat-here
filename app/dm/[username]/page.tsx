@@ -63,6 +63,7 @@ export default function DMThreadPage() {
 
         const result = await response.json();
         setMessages(result.data);
+        markIncomingMessagesSeen(result.data);
 
         if (result.data.length > 0) {
             lastTimestampRef.current = result.data[result.data.length - 1].created_at;
@@ -88,8 +89,29 @@ export default function DMThreadPage() {
 
         if (result.data.length > 0) {
             setMessages((prev) => [...prev, ...result.data]);
+            markIncomingMessagesSeen(result.data);
             lastTimestampRef.current = result.data[result.data.length - 1].created_at;
         }
+    }
+
+    function markIncomingMessagesSeen(newMessages: Message[]) {
+        const currentUsername = localStorage.getItem("username") || "";
+        const latestIncoming = newMessages.reduce<Message | null>((latest, message) => {
+            if (message.sender === currentUsername) return latest;
+            if (!latest || Date.parse(message.created_at) > Date.parse(latest.created_at)) {
+                return message;
+            }
+            return latest;
+        }, null);
+
+        if (!latestIncoming) return;
+
+        const latestIncomingTime = Date.parse(latestIncoming.created_at);
+        const lastSeenTime = Date.parse(localStorage.getItem("dmLastSeen") || "");
+        if (!Number.isFinite(latestIncomingTime) || latestIncomingTime <= lastSeenTime) return;
+
+        localStorage.setItem("dmLastSeen", latestIncoming.created_at);
+        window.dispatchEvent(new Event("dm:read"));
     }
 
     async function handleSend(e: React.FormEvent) {
